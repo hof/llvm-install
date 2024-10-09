@@ -1,0 +1,26 @@
+name: llvm-instal
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'LLVM major version to install (eg. 19)'
+        required: true
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: install llvm
+        run: docker build .  --build-arg "VERSION=${{ github.event.inputs.version }}" --tag llvm-install
+
+      - name: push image
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/llvm-install:${{ github.event.inputs.version }}
+          docker tag llvm-install $IMAGE_ID
+          docker push $IMAGE_ID
