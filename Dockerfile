@@ -11,7 +11,7 @@ RUN echo "#" | tee /etc/apt/sources.list
 RUN apt-add-repository "deb http://apt.llvm.org/bookworm/ llvm-toolchain-bookworm-${VERSION} main"
 
 RUN apt-get update && apt-get install -y clang-${VERSION} lld-${VERSION} libc++-${VERSION}-dev libc++abi-${VERSION}-dev \
-    lldb-${VERSION} ninja-build git cmake
+    lldb-${VERSION} ninja-build git cmake libncurses6
 
 ENV PATH=/usr/lib/llvm-${VERSION}/bin:$PATH
 ENV CC=clang-${VERSION}
